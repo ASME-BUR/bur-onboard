@@ -1,0 +1,25 @@
+2025-07-15 03:59:16.852 [info] Extension host with pid 332 started
+2025-07-15 03:59:16.852 [error] Error: listen EACCES: permission denied /run/user/1000/vscode-ipc-209f4739-8696-4350-942d-aeaeeaccc53f.sock
+    at Server.setupListenHandle [as _listen2] (node:net:1917:21)
+    at listenInCluster (node:net:1996:12)
+    at Server.listen (node:net:2118:5)
+    at zA.g (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:166:28687)
+    at new IG (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:166:28602)
+    at new zA (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:166:30642)
+    at h4.o (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:37:1582)
+    at h4.createInstance (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:37:1079)
+    at KG.wb (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:205:431)
+    at KG.initialize (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:117:9582)
+    at new X3 (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:119:723)
+    at xJ (file:///vscode/vscode-server/bin/linux-x64/cb0c47c0cfaad0757385834bd89d410c78a856c0/out/vs/workbench/api/node/extensionHostProcess.js:356:9912)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-07-15 03:59:16.858 [info] Lock '/root/.vscode-server/data/User/workspaceStorage/07694de8a44699e9c1412a9524a7b39e/vscode.lock': Lock acquired.
+2025-07-15 03:59:16.931 [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*', root cause: vscode.git
+2025-07-15 03:59:16.960 [info] ExtensionService#_doActivateExtension vscode.git, startup: true, activationEvent: '*'
+2025-07-15 03:59:16.960 [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+2025-07-15 03:59:17.089 [info] Eager extensions activated
+2025-07-15 03:59:17.089 [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: false, activationEvent: 'onStartupFinished'
+2025-07-15 03:59:17.089 [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+2025-07-15 03:59:38.000 [info] Extension host terminating: received terminate message from renderer
+2025-07-15 03:59:38.001 [info] Lock '/root/.vscode-server/data/User/workspaceStorage/07694de8a44699e9c1412a9524a7b39e/vscode.lock': Marking the lockfile as scheduled to be released in 6000 ms.
+2025-07-15 03:59:38.014 [info] Extension host with pid 332 exiting with code 0
