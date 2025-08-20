@@ -1,0 +1,10 @@
+install/
+build/
+log/
+.vscode/
+
+src/.vscode
+src/submodules
+
+ros2bags/
+setup.zsh
