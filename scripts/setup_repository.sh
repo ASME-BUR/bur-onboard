@@ -1,19 +1,20 @@
- apt-get update
- apt-get upgrade -y
- apt-get install -y ros-${ROS_DISTRO}-control-toolbox \
-                        ros-${ROS_DISTRO}-robot-localization \
-                        ros-${ROS_DISTRO}-mavros \
-                        ros-${ROS_DISTRO}-navigation2 \
-                        ros-${ROS_DISTRO}-behaviortree-cpp \
-                        ros-${ROS_DISTRO}-image-common \
-                        python3-pip \
-                        python3-rosdep \
-                        python3-vcstool \
-                        libeigen3-dev \
-                        unzip
+# Install apt dependencies
+apt-get update
+apt-get upgrade -y
+apt-get install -y ros-${ROS_DISTRO}-control-toolbox \
+                   ros-${ROS_DISTRO}-robot-localization \
+                   ros-${ROS_DISTRO}-mavros \
+                   ros-${ROS_DISTRO}-navigation2 \
+                   ros-${ROS_DISTRO}-behaviortree-cpp \
+                   ros-${ROS_DISTRO}-image-common \
+                   python3-pip \
+                   python3-rosdep \
+                   python3-vcs2l \
+                   libeigen3-dev \
+                   unzip \
+                   wget
 
-python3 -m pip install vcs2l
-
+# Install pigpio
 wget https://github.com/joan2937/pigpio/archive/master.zip && \
     unzip master.zip && \
     cd pigpio-master && \
@@ -22,7 +23,10 @@ wget https://github.com/joan2937/pigpio/archive/master.zip && \
     cd .. && \
     rm -rf master.zip pigpio-master
 
+[ -e /etc/ros/rosdep/sources.list.d/20-default.list ] || rosdep init
 rosdep update
 
-echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
-    echo "source ~/2024-2025/ros2_ws/install/setup.bash" >> ~/.bashrc
+ROS_INSTALL_PATH="$(pwd)/install/setup.bash"
+grep -F "source ${ROS_INSTALL_PATH}" ~/.bashrc \
+    || echo "source ${ROS_INSTALL_PATH}" >> ~/.bashrc
+

@@ -2,11 +2,11 @@ services:
   bur-onboard:
     build:
       context: ..
-      dockerfile: docker/Dockerfile_v1
+      dockerfile: docker/Dockerfile.humble
     entrypoint: /bin/bash
     tty: true
     volumes:
-      - ../:/root/2024-2025
+      - ../:/root/bur-onboard
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /mnt/wslg:/mnt/wslg
     environment:
