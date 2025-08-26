@@ -1,10 +1,12 @@
+# Submodules
+src/submodules
+
+# Colcon build folders
 install/
 build/
 log/
-.vscode/
 
-src/.vscode
-src/submodules
-
-ros2bags/
-setup.zsh
+# Misc. junk
+__pycache__/
+.DS_Store
+.vscode/settings.json

@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install Deps",
+            "detail": "Builds ROS packages using colcon",
+            "type": "shell",
+            "command": "./scripts/install_dependencies.sh",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+            }
+        },
+        {
+            "label": "Build Everything",
+            "detail": "Builds ROS packages using colcon",
+            "type": "shell",
+            "command": "./scripts/build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+            }
+        },
+        {
+            "label": "Clean Repository",
+            "detail": "Removes built packages",
+            "type": "shell",
+            "command": "rm -rf build install log",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+            }
+        }
+    ]
+}

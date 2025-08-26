@@ -20,6 +20,7 @@ apt-get install -y ros-${ROS_DISTRO}-control-toolbox \
                    python3-vcs2l \
                    libeigen3-dev \
                    unzip \
+                   nano \
                    wget
 
 # Install pigpio
