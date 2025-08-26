@@ -58,5 +58,3 @@ grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.b
     || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
 grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
     || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
-
-source /opt/ros/humble/setup.bash

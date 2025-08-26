@@ -1,3 +1,11 @@
+# Add ROS entries to ~/.bashrc
+grep -F "source /opt/ros/humble/setup.bash" ~/.bashrc \
+    || echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.bashrc \
+    || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
+grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
+    || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
+
 # Install apt dependencies
 apt-get update
 apt-get upgrade -y
@@ -25,8 +33,3 @@ wget https://github.com/joan2937/pigpio/archive/master.zip && \
 
 [ -e /etc/ros/rosdep/sources.list.d/20-default.list ] || rosdep init
 rosdep update
-
-ROS_INSTALL_PATH="$(pwd)/install/setup.bash"
-grep -F "source ${ROS_INSTALL_PATH}" ~/.bashrc \
-    || echo "source ${ROS_INSTALL_PATH}" >> ~/.bashrc
-

@@ -4,14 +4,13 @@ USER root
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
-COPY scripts/setup_ros.sh setup_ros.sh
-COPY scripts/setup_repository.sh setup_repository.sh
-
 # Install ROS dependencies
+COPY scripts/setup_ros.sh setup_ros.sh
 RUN ./setup_ros.sh
 
-WORKDIR /root/bur-onboard
+# Install BUR dependencies
+COPY scripts/setup_repository.sh setup_repository.sh
 RUN ./setup_repository.sh
 
-CMD cd /root/bur-onboard/ros2_ws
+WORKDIR /root/bur-onboard
 ENTRYPOINT /bin/bash
