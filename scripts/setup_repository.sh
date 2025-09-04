@@ -6,6 +6,8 @@ grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.b
 grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
     || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
 
+source /opt/ros/humble/setup.bash
+
 # Install apt dependencies
 apt-get update
 apt-get upgrade -y
@@ -21,6 +23,7 @@ apt-get install -y ros-${ROS_DISTRO}-control-toolbox \
                    libeigen3-dev \
                    unzip \
                    nano \
+                   git \
                    wget
 
 # Install pigpio

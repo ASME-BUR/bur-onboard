@@ -10,7 +10,7 @@ while true; do
         (exit "$exit_code")
         break
     else
-        echo -e "\n\e[32m[INFO] \e[34mOOM SIGKILL detected, restarting... (# restarts: $restarts)\e[0m\n"
+        echo -e "\n\e[32m[INFO] \e[00mOOM SIGKILL detected, restarting... (# restarts: $restarts)\e[0m\n"
         let restarts++
     fi
 done
