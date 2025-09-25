@@ -1,0 +1,17 @@
+services:
+  bur-onboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.humble
+    entrypoint: /bin/bash
+    tty: true
+    volumes:
+      - ../:/root/bur-onboard
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /mnt/wslg:/mnt/wslg
+    environment:
+      - DISPLAY=:0
+      - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
+      - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
+      - PULSE_SERVER=${PULSE_SERVER}
+      - LIBGL_ALWAYS_SW=1

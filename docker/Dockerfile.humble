@@ -1,0 +1,10 @@
+FROM osrf/ros:humble-desktop-full
+
+USER root
+
+# Install BUR dependencies
+COPY scripts/setup_repository.sh setup_repository.sh
+RUN ./setup_repository.sh
+
+WORKDIR /root/bur-onboard
+ENTRYPOINT /bin/bash

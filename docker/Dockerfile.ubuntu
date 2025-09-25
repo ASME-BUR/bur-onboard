@@ -1,0 +1,16 @@
+FROM ubuntu:22.04
+
+USER root
+
+ENV DEBIAN_FRONTEND=noninteractive 
+
+# Install ROS dependencies
+COPY scripts/setup_ros.sh setup_ros.sh
+RUN ./setup_ros.sh
+
+# Install BUR dependencies
+COPY scripts/setup_repository.sh setup_repository.sh
+RUN ./setup_repository.sh
+
+WORKDIR /root/bur-onboard
+ENTRYPOINT /bin/bash

@@ -12,5 +12,7 @@ if [ $? -eq 0 ]; then
     mkdir -p src/submodules
     vcs import --input required.repos src/submodules
 else
-    echo "No connection, skipping..."
+    info "No connection, skipping..."
 fi
+
+rosdep install --from-paths src --ignore-src -r -y
