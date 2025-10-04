@@ -1,11 +1,11 @@
 ## Building
 To build all packages, run the following (from this directory):
 ```
-colcon build
+scripts/build
 ```
 Alternatively, to build a specific package:
 ```
-colcon build --packages-select <PACKAGE_NAME>
+scripts/build --packages-select <PACKAGE_NAME>
 ```
 (*See ``colcon build -h`` for more options.*)
 
