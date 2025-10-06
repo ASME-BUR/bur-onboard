@@ -9,7 +9,7 @@
 ### 1. Clone this repository into your root directory: ###
 
    ```
-   cd ~/ && git clone https://github.com/ASME-BUR/2024-2025.git
+   cd ~/ && git clone https://github.com/ASME-BUR/bur-onboard.git && cd bur-onboard
    ```
 
 ### 2. Run the ROS installation script ###
