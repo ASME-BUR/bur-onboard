@@ -17,18 +17,29 @@
    cd ~/ && git clone https://github.com/ASME-BUR/bur-onboard.git && cd bur-onboard
    ```
 
-### 3. Run the ROS installation script ###
+### 3. Run our ROS installation script ###
    ```
    sudo bash scripts/setup_ros.sh
    ```
-Once this command finishes, close and re-open your terminal before proceeding.
+(This will likely take ~8-12 minutes.)
 
-### 4. Run the repository setup script ###
+### 4. Add sources to ~/.bashrc ###
+   ```
+   grep -F "source /opt/ros/humble/setup.bash" ~/.bashrc \
+       || echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+   grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.bashrc \
+       || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
+   grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
+       || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
+   ```
+After running this command, close and re-open your terminal before proceeding.
+
+### 4. Run our repository setup script ###
   ```
   sudo bash scripts/setup_repository.sh
   ```
 
-### 5. Install dependencies using VCS ###
+### 5. Run our VCS dependency installation script ###
   ```
   sudo bash scripts/install_dependencies.sh
   ```
