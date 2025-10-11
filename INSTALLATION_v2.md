@@ -34,6 +34,8 @@
    ```
 After running this command, close and re-open your terminal before proceeding.
 
+(Make sure to `cd` into the `bur-onboard` repository folder again before proceeding.)
+
 ### 4. Run our repository setup script ###
   ```
   sudo bash scripts/setup_repository.sh
