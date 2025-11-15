@@ -17,6 +17,7 @@ apt-get install -y ros-${ROS_DISTRO}-control-toolbox \
                    ros-${ROS_DISTRO}-navigation2 \
                    ros-${ROS_DISTRO}-behaviortree-cpp \
                    ros-${ROS_DISTRO}-image-common \
+                   ros-${ROS_DISTRO}-realtime-tools \
                    python3-pip \
                    python3-rosdep \
                    python3-vcs2l \
