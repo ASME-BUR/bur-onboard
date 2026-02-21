@@ -12,6 +12,7 @@ namespace controller
     this->declare_parameter("publish_rate", 100);
     this->declare_parameter("use_command_target", false);
     this->declare_parameter("using_joy", true);
+    this->declare_parameter("debug", false);
 
     state_setpoint_sub = this->create_subscription<bur_msgs::msg::Command>(
         this->get_parameter("sub_topic").as_string(), 1,
@@ -85,9 +86,7 @@ namespace controller
     result.reason = "success";
     for (const auto &param : parameters)
     {
-      RCLCPP_INFO(this->get_logger(), "%s", param.get_name().c_str());
-      RCLCPP_INFO(this->get_logger(), "%s", param.get_type_name().c_str());
-      RCLCPP_INFO(this->get_logger(), "%s", param.value_to_string().c_str());
+      RCLCPP_INFO(this->get_logger(), "%s: %s", param.get_name().c_str(), param.value_to_string().c_str());
     }
     new_params = true;
     return result;
@@ -127,7 +126,7 @@ namespace controller
 
       double roll_setpoint, pitch_setpoint, yaw_setpoint;
       q = tf2::Quaternion(msg->target_pos.pose.orientation.x, msg->target_pos.pose.orientation.y, msg->target_pos.pose.orientation.z, msg->target_pos.pose.orientation.w);
-      std::cout << msg->target_pos.pose.orientation.x << msg->target_pos.pose.orientation.y << msg->target_pos.pose.orientation.z << msg->target_pos.pose.orientation.w << std::endl;
+      // std::cout << msg->target_pos.pose.orientation.x << msg->target_pos.pose.orientation.y << msg->target_pos.pose.orientation.z << msg->target_pos.pose.orientation.w << std::endl;
       rot_matrix = tf2::Matrix3x3(q);
       rot_matrix.getRPY(roll_setpoint, pitch_setpoint, yaw_setpoint);
 
@@ -168,7 +167,7 @@ namespace controller
       {
         roll_hold = false;
       }
-      // Pitch hold
+      // Pitch holdstd::cout << "linear z position: " << pose_state.position.z << " EXPECTED: " << pose_setpoint.position.z << std::endl;
       if (abs(twist_setpoint.angular.y) <= 0.1 && pitch_hold == false)
       {
         pitch_setpoint = pitch_state;
@@ -208,14 +207,18 @@ namespace controller
           controlEffort.wrench.force.x = -linear_x.computeCommand(twist_setpoint.linear.x - twist_state.linear.x, dt);
           controlEffort.wrench.force.y = -linear_y.computeCommand(twist_setpoint.linear.y - twist_state.linear.y, dt);
           controlEffort.wrench.force.z = linear_z.computeCommand(pose_setpoint.position.z - pose_state.position.z, dt);
-          std::cout << "state: " << state_angle.getX() << " " << state_angle.getY() << " " << state_angle.getZ() << std::endl;
-          std::cout << "setpoint: " << setpoint_angle.getX() << " " << setpoint_angle.getY() << " " << setpoint_angle.getZ() << std::endl;
-          // std::cout << "angle_wrap x: " << angle_wrap_pi(setpoint_angle.getX() - state_angle.getX()) << std::endl;
-          // std::cout << "angle_wrap y: " << angle_wrap_pi(setpoint_angle.getY() - state_angle.getY()) << std::endl;
-          // std::cout << pose_setpoint.position.z << std::endl;
-          // std::cout << pose_state.position.z << std::endl;
-          // std::cout << twist_setpoint.linear.z << std::endl;
-          // std::cout << twist_state.linear.z << std::endl;
+          if(this->get_parameter("debug").as_bool){
+          std::cout << "\033[2J\033[1;1H" << std::endl;
+          std::cout << "linear x velocity: " << twist_state.linear.x << " EXPECTED: " << twist_setpoint.linear.x << std::endl;
+          std::cout << "linear y velocity: " << twist_state.linear.y << " EXPECTED: " << twist_setpoint.linear.y << std::endl; 
+          std::cout << "linear z position: " << pose_state.position.z << " EXPECTED: " << pose_setpoint.position.z << std::endl;
+          std::cout << "yaw (z) angle (pos): " << state_angle.getZ() << " EXPECTED (if yaw_hold = true): " << setpoint_angle.getZ() << std::endl;
+          std::cout << "yaw (z) twist (vel): " << twist_state.angular.z << " EXPECTED (if yaw_hold = false): " << twist_setpoint.angular.z << std::endl;
+          std::cout << "roll (x) angle (pos): " << state_angle.getX() << " EXPECTED (if roll_hold = true): " << setpoint_angle.getX() << std::endl;
+          std::cout << "roll (x) twist (vel): " << twist_state.angular.x << " EXPECTED (if roll_hold = false): " << twist_setpoint.angular.x << std::endl;
+          std::cout << "pitch (y) angle (pos): " << state_angle.getY() << " EXPECTED (if pitch_hold = true): " << setpoint_angle.getY() << std::endl;
+          std::cout << "pitch (y) twist (vel): " << twist_state.angular.y << " EXPECTED (if pitch_hold = false): " << twist_setpoint.angular.y << std::endl;
+          }
 
           if (yaw_hold)
           {
