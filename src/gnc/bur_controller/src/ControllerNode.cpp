@@ -207,7 +207,7 @@ namespace controller
           controlEffort.wrench.force.x = -linear_x.computeCommand(twist_setpoint.linear.x - twist_state.linear.x, dt);
           controlEffort.wrench.force.y = -linear_y.computeCommand(twist_setpoint.linear.y - twist_state.linear.y, dt);
           controlEffort.wrench.force.z = linear_z.computeCommand(pose_setpoint.position.z - pose_state.position.z, dt);
-          if(this->get_parameter("debug").as_bool){
+          if(this->get_parameter("debug").as_bool()){
           std::cout << "\033[2J\033[1;1H" << std::endl;
           std::cout << "linear x velocity: " << twist_state.linear.x << " EXPECTED: " << twist_setpoint.linear.x << std::endl;
           std::cout << "linear y velocity: " << twist_state.linear.y << " EXPECTED: " << twist_setpoint.linear.y << std::endl; 
