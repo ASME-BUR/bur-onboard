@@ -49,7 +49,7 @@ def generate_launch_description():
     return LaunchDescription([
         thruster_manager,
         controller_launch,
-        # depth_sensor,
+        depth_sensor,
         # camera,
         arduino,
         rov_joy
