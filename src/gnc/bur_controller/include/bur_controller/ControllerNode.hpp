@@ -17,6 +17,29 @@
 
 namespace controller
 {
+  class Pid{
+  public:
+    double kp = 0;
+    double kd = 0;
+    double ki = 0;
+    double pastE = 0;
+    double currentE = 0;
+    double rsum = 0;
+    void setGains(double a, double b, double c, double, double, bool){
+      kp = a;
+      kd = b;
+      ki = c;
+    }
+
+    double computeCommand(double error, double dt){ //error is already calculated in the function calls
+      double currentE = error;
+      double deriv = (currentE - pastE) / dt;
+      rsum += currentE * dt;
+      double o = kp * currentE + kd * deriv + rsum * ki;
+      pastE = currentE;
+      return o;
+    }
+  };
 
   class ControllerNode : public rclcpp::Node
   {
