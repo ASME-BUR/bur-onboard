@@ -32,9 +32,10 @@ namespace controller
     }
 
     double computeCommand(double error, double dt){ //error is already calculated in the function calls
+      double t = dt/1e9; // turn dt from nanoseconds -> seconds
       double currentE = error;
-      double deriv = (currentE - pastE) / dt;
-      rsum += currentE * dt;
+      double deriv = (currentE - pastE) / t;
+      rsum += currentE * t;
       double o = kp * currentE + kd * deriv + rsum * ki;
       pastE = currentE;
       return o;
