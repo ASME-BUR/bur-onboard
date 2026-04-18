@@ -14,6 +14,8 @@ namespace controller
     this->declare_parameter("using_joy", true);
     this->declare_parameter("debug", false);
 
+    this->declare_parameter("debug", false);
+
     state_setpoint_sub = this->create_subscription<bur_msgs::msg::Command>(
         this->get_parameter("sub_topic").as_string(), 1,
         std::bind(&ControllerNode::currentCommandCallback, this, std::placeholders::_1));
@@ -26,13 +28,13 @@ namespace controller
     pubTimer_ = this->create_wall_timer(
         std::chrono::milliseconds(1000 / publish_rate), std::bind(&ControllerNode::publishState, this));
 
-    linear_x = control_toolbox::Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
-    linear_y = control_toolbox::Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
-    linear_z = control_toolbox::Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
+    linear_x = Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
+    linear_y = Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
+    linear_z = Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
 
-    angular_x = control_toolbox::Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
-    angular_y = control_toolbox::Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
-    angular_z = control_toolbox::Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
+    angular_x = Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
+    angular_y = Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
+    angular_z = Pid(0.0, 0.0, 0.0, 1.0, -1.0, true);
 
     this->declare_parameter("max_force", 100.0);
     this->declare_parameter("max_torque", 60.0);

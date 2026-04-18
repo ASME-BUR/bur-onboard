@@ -25,6 +25,14 @@ namespace controller
     double pastE = 0;
     double currentE = 0;
     double rsum = 0;
+    
+    Pid (){}
+    Pid(double a, double b, double c, double, double, bool){
+      kp = a;
+      kd = b;
+      ki = c;
+    }
+
     void setGains(double a, double b, double c, double, double, bool){
       kp = a;
       kd = b;
@@ -56,13 +64,13 @@ namespace controller
     rclcpp::Time prevTime;
 
     // implementation
-    control_toolbox::Pid linear_x;
-    control_toolbox::Pid linear_y;
-    control_toolbox::Pid linear_z;
+    Pid linear_x;
+    Pid linear_y;
+    Pid linear_z;
 
-    control_toolbox::Pid angular_x;
-    control_toolbox::Pid angular_y;
-    control_toolbox::Pid angular_z;
+    Pid angular_x;
+    Pid angular_y;
+    Pid angular_z;
 
     rclcpp::TimerBase::SharedPtr pubTimer_;
 
@@ -74,7 +82,7 @@ namespace controller
 
     //  callbacks
     rcl_interfaces::msg::SetParametersResult parametersCallback(
-        const std::vector<rclcpp::Parameter> &parameters);
+    const std::vector<rclcpp::Parameter> &parameters);
     rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr param_callback;
     void currentCommandCallback(const bur_msgs::msg::Command::SharedPtr msg);
     void set_constants();
