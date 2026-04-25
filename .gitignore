@@ -9,4 +9,4 @@ log/
 # Misc. junk
 __pycache__/
 .DS_Store
-.vscode/settings.json
+**/.vscode/*

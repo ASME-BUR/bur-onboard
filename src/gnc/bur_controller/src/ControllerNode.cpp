@@ -14,8 +14,6 @@ namespace controller
     this->declare_parameter("using_joy", true);
     this->declare_parameter("debug", false);
 
-    this->declare_parameter("debug", false);
-
     state_setpoint_sub = this->create_subscription<bur_msgs::msg::Command>(
         this->get_parameter("sub_topic").as_string(), 1,
         std::bind(&ControllerNode::currentCommandCallback, this, std::placeholders::_1));

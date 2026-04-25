@@ -11,7 +11,7 @@ JoyCommand::JoyCommand() : rclcpp::Node("joy_command")
     this->declare_parameter("pose_topic", "set_pose");
     this->declare_parameter("imu_topic", "imu");
     this->declare_parameter("multiplier", 0.5);
-    const std::map<std::string, int> &axis_mapping = {{"linear_x", 1}, {"linear_y", 0}, {"linear_z", 2}, {"angular_x", 3}, {"angular_y", 4}, {"angular_z", 5}};
+    const std::map<std::string, int> &axis_mapping = {{"linear_x", 1}, {"linear_y", 0}, {"linear_z", 2}, {"angular_x", 0}, {"angular_y", 0}, {"angular_z", 4}};
     this->declare_parameters("axis_mapping", axis_mapping);
     this->declare_parameter("using_ekf", false);
     this->declare_parameter("using_joy", true);
@@ -74,12 +74,20 @@ void JoyCommand::joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg)
             output.header.frame_id = "odom";
             output.target_vel.header.stamp = this->now();
             output.target_vel.header.frame_id = "odom";
-            output.target_vel.twist.linear.x = multiplier * msg->axes[abs(axis_mapping_.at("linear_x"))];
-            output.target_vel.twist.linear.y = multiplier * msg->axes[abs(axis_mapping_.at("linear_y"))];
-            output.target_vel.twist.linear.z = multiplier * msg->axes[abs(axis_mapping_.at("linear_z"))];
-            output.target_vel.twist.angular.x = multiplier * msg->axes[abs(axis_mapping_.at("angular_x"))];
-            output.target_vel.twist.angular.y = multiplier * -msg->axes[abs(axis_mapping_.at("angular_y"))];
-            output.target_vel.twist.angular.z = multiplier * msg->axes[abs(axis_mapping_.at("angular_z"))];
+
+            auto get_msg_axis = [msg](int64_t mapping) {
+                if (mapping < 0 || abs(mapping) > msg->axes.size()) {
+                    return 0.0;
+                }
+                return (double) msg->axes[mapping];
+            };
+
+            output.target_vel.twist.linear.x = multiplier * -get_msg_axis(axis_mapping_.at("linear_x"));
+            output.target_vel.twist.linear.y = multiplier * -get_msg_axis(axis_mapping_.at("linear_y"));
+            output.target_vel.twist.linear.z = multiplier * get_msg_axis(axis_mapping_.at("linear_z"));
+            output.target_vel.twist.angular.x = multiplier * get_msg_axis(axis_mapping_.at("angular_x"));
+            output.target_vel.twist.angular.y = multiplier * -get_msg_axis(axis_mapping_.at("angular_y"));
+            output.target_vel.twist.angular.z = multiplier * -get_msg_axis(axis_mapping_.at("angular_z"));
 
             // Debug
             joy_euler_msg.header.stamp = this->now();
@@ -99,7 +107,7 @@ void JoyCommand::joy_callback(const sensor_msgs::msg::Joy::SharedPtr msg)
             tf2::Quaternion q;
             q.setRPY(joy_euler_msg.vector.x * M_PI_2 / 180, joy_euler_msg.vector.y * M_PI_2 / 180, 0);
             q.normalize();
-            output.target_pos.pose.orientation = tf2::toMsg(q);
+            // output.target_pos.pose.orientation = tf2::toMsg(q);
 
             output.buttons.clear();
             for (uint8_t i = 0; i < msg->buttons.size(); i++)
