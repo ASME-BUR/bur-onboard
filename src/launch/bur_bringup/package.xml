@@ -7,7 +7,10 @@
   <maintainer email="ax90l0tl@gmail.com">grape</maintainer>
   <license>TODO: License declaration</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
 
   <depend>bur_controller</depend>
   <depend>bur_msgs</depend>
@@ -15,10 +18,7 @@
   <depend>bur_sensors</depend>
   <depend>bur_thruster_manager</depend>
 
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
-
   <export>
-    <build_type>ament_cmake</build_type>
+    <build_type>ament_python</build_type>
   </export>
 </package>
