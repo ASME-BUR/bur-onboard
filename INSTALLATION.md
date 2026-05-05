@@ -6,73 +6,67 @@
 
 # Installation #
 
-### 1. If you don’t have ROS 2 Humble installed ###
-Follow the instructions below and install the `ros-humble-desktop`/`ros-dev-tools` packages: <https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html>
-
-Additionally, follow the instructions for environment setup here: <https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Configuring-ROS2-Environment.html>
-
-### 2. Install Pigpio ###
-Move to your root directory:
+### 1. Install Git ###
    ```
-   cd ~/
+   sudo apt update && sudo apt-get install -y git-all
    ```
 
-Follow the instructions below:
-   <https://abyz.me.uk/rpi/pigpio/download.html>
-
-### 3. Clone this repository into your root directory: ###
+### 2. Clone this repository into your root directory: ###
 
    ```
-   cd ~/ && git clone --recurse-submodules https://github.com/ASME-BUR/2024-2025.git
+   cd ~/ && git clone https://github.com/ASME-BUR/bur-onboard.git && cd bur-onboard
    ```
 
-### 4. Put these commands into your ~/.bashrc: ###
-Add the ROS2 source commands to your bashrc
+### 3. Run our ROS installation script ###
    ```
-   echo "source /opt/ros/humble/setup.bash
-   source ~/2024-2025/ros2_ws/install/setup.bash" >> ~/.bashrc
+   sudo bash scripts/setup_ros.sh
    ```
+(This will likely take ~8-12 minutes.)
 
-- The `/opt/ros/humble/setup.bash` file sources all your ros packages installed in `/opt`, e.g. all packages installed via `sudo apt-get <PACKAGE>`   
-- The `install/setup.bash` file sources all packages built via `colcon build` (in your ws); however, you will need to re-source it every time you build a package for the first time. (You can simply create a new terminal.)
+### 4. Add sources to ~/.bashrc ###
+   ```
+   grep -F "source /opt/ros/humble/setup.bash" ~/.bashrc \
+       || echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+   grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.bashrc \
+       || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
+   grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
+       || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
+   ```
+After running this command, close and re-open your terminal before proceeding.
 
-### 5. Install the ROS dependency manager. ###
-Run the following in a terminal:
+(Make sure to `cd` into the `bur-onboard` repository folder again before proceeding.)
 
-   ```
-   sudo apt install python3-rosdep
-   sudo rosdep init
-   rosdep update
-   ```
-   Browse to the root of your workspace and check for missing dependencies:
+### 4. Run our repository setup script ###
+  ```
+  sudo bash scripts/setup_repository.sh
+  ```
 
-   ```
-   cd ~/2024-2025/ros2_ws/
-   rosdep install -i --from-path src --rosdistro humble -y
-   ```
+### 5. Run our VCS dependency installation script ###
+  ```
+  sudo bash scripts/install_dependencies.sh
+  ```
 
-   - If rosdep is having trouble installing packages, you can also install them manually using `sudo apt install ros-humble-<PACKAGE_NAME>`
+### 6. Do a test build of BUR packages ###
+  ```
+  source ~/.bashrc
+  scripts/build
+  ```
+The build script may print messages regarding "OOM SIGKILL"; this is due to an issue with `colcon` (the ROS2 build package). As long as the script continues, this is okay.
 
-### 6. Install Colcon, the build tool system: ###
-   ```
-   sudo apt install python3-colcon-common-extensions
-   ```
-
-### 7. Build packages in ros2_ws: ###
-   ```
-   cd ~/2024-2025/ros2_ws
-   colcon build
-   ```
-   * Some of these packages are very big so it might take a couple builds
-   * If a package fails once, you  may just have to try it again; if it fails more than once, then you may still be missing dependencies
-   * You can also build a specific package:
-      ```
-      colcon build --packages-select <PACKAGE-NAME>
-      ```
-      or build packages recursively
-      ```
-      colcon build --packages-up-to <PACKAGE-NAME>
-      ```
+### 7. Test your installation ###
+To verify that your install and build succeeded, feel free to run the following command:
+```
+ros2 launch bur_bringup rov.launch.py
+```
+If you run ```ros2 node list``` (in a separate terminal), you should see something similar to the following:
+```
+root@d53438d5ffdb:/# ros2 node list
+/bur_controller
+/joy
+/joy_command
+/thruster_manager
+```
+(Your results may look slightly different, depending on your version of the repository; as long as some nodes appear, this is OK.)
 
 ### (Optional) Install Gazebo: ###
 
