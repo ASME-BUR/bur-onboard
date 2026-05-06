@@ -19,6 +19,28 @@ from rcl_interfaces.msg import SetParametersResult
 import numpy as np
 
 
+def quat_to_rpy(x: float, y: float, z: float, w: float) -> tuple[float, float, float]:
+    """Convert a unit quaternion (x,y,z,w) to roll/pitch/yaw (radians)."""
+    # roll (x-axis)
+    sinr_cosp = 2.0 * (w * x + y * z)
+    cosr_cosp = 1.0 - 2.0 * (x * x + y * y)
+    roll = math.atan2(sinr_cosp, cosr_cosp)
+
+    # pitch (y-axis)
+    sinp = 2.0 * (w * y - z * x)
+    if abs(sinp) >= 1.0:
+        pitch = math.copysign(math.pi / 2, sinp)
+    else:
+        pitch = math.asin(sinp)
+
+    # yaw (z-axis)
+    siny_cosp = 2.0 * (w * z + x * y)
+    cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
+    yaw = math.atan2(siny_cosp, cosy_cosp)
+
+    return roll, pitch, yaw
+
+
 class JoyCommand(Node):
     def __init__(self):
         super().__init__('joy_command')
@@ -133,7 +155,6 @@ class JoyCommand(Node):
                 .get_parameter_value().integer_value
             )
 
-        self.get_logger().info(f"angular_z axis: {self.axis_mapping['angular_z']}")
         self.new_params = False
 
     def parameters_callback(self, parameters):
@@ -200,7 +221,7 @@ class JoyCommand(Node):
 
         # Convert quaternion → Euler and publish
         # Note: tf2 quaternion convention is (x, y, z, w)
-        roll, pitch, yaw = self._quat_to_rpy(
+        roll, pitch, yaw = self.quat_to_rpy(
             msg.orientation.x,
             msg.orientation.y,
             msg.orientation.z,
@@ -231,32 +252,6 @@ class JoyCommand(Node):
         if self.new_params:
             self.set_constants()
         self.cmd_pub.publish(self.output)
-
-    # ------------------------------------------------------------------
-    # Utility
-    # ------------------------------------------------------------------
-
-    @staticmethod
-    def _quat_to_rpy(x: float, y: float, z: float, w: float) -> tuple[float, float, float]:
-        """Convert a unit quaternion (x,y,z,w) to roll/pitch/yaw (radians)."""
-        # roll (x-axis)
-        sinr_cosp = 2.0 * (w * x + y * z)
-        cosr_cosp = 1.0 - 2.0 * (x * x + y * y)
-        roll = math.atan2(sinr_cosp, cosr_cosp)
-
-        # pitch (y-axis)
-        sinp = 2.0 * (w * y - z * x)
-        if abs(sinp) >= 1.0:
-            pitch = math.copysign(math.pi / 2, sinp)
-        else:
-            pitch = math.asin(sinp)
-
-        # yaw (z-axis)
-        siny_cosp = 2.0 * (w * z + x * y)
-        cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
-        yaw = math.atan2(siny_cosp, cosy_cosp)
-
-        return roll, pitch, yaw
 
 
 def main(args=None):
