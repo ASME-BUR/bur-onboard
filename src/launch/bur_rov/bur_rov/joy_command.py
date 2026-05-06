@@ -39,10 +39,10 @@ class JoyCommand(Node):
         axis_defaults = {
             'linear_x':  1,
             'linear_y':  0,
-            'linear_z':  2,
+            'linear_z':  4,
             'angular_x': 0,
             'angular_y': 0,
-            'angular_z': 4,
+            'angular_z': 3,
         }
         for key, val in axis_defaults.items():
             self.declare_parameter(f'axis_mapping.{key}', val)
