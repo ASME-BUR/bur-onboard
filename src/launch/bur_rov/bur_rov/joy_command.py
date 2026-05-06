@@ -129,14 +129,9 @@ class JoyCommand(Node):
         # State
         self.output = Command()
         self.new_params = False
-        self.v_0 = [0.0, 0.0, 0.0]
-        self.velocity = [0.0, 0.0, 0.0]
-        self.prev_time = self.get_clock().now()
         self.axis_mapping: dict[str, int] = {}
 
         self.set_constants()
-
-        # Parameter change callback
         self.add_on_set_parameters_callback(self.parameters_callback)
 
     # ------------------------------------------------------------------
@@ -187,14 +182,12 @@ class JoyCommand(Node):
                 return 0.0
             return float(msg.axes[mapping])
 
-        m = self.multiplier
-        am = self.axis_mapping
-        self.output.target_vel.twist.linear.x  =  m * -get_axis(am['linear_x'])
-        self.output.target_vel.twist.linear.y  =  m * -get_axis(am['linear_y'])
-        self.output.target_vel.twist.linear.z  =  m *  get_axis(am['linear_z'])
-        self.output.target_vel.twist.angular.x =  m *  get_axis(am['angular_x'])
-        self.output.target_vel.twist.angular.y =  m * -get_axis(am['angular_y'])
-        self.output.target_vel.twist.angular.z =  m * -get_axis(am['angular_z'])
+        self.output.target_vel.twist.linear.x  =  self.multiplier * -get_axis(self.axis_mapping['linear_x'])
+        self.output.target_vel.twist.linear.y  =  self.multiplier * -get_axis(self.axis_mapping['linear_y'])
+        self.output.target_vel.twist.linear.z  =  self.multiplier *  get_axis(self.axis_mapping['linear_z'])
+        self.output.target_vel.twist.angular.x =  self.multiplier *  get_axis(self.axis_mapping['angular_x'])
+        self.output.target_vel.twist.angular.y =  self.multiplier * -get_axis(self.axis_mapping['angular_y'])
+        self.output.target_vel.twist.angular.z =  self.multiplier * -get_axis(self.axis_mapping['angular_z'])
 
     def depth_callback(self, msg: PoseWithCovarianceStamped):
         self.output.current_pos.header.stamp = self.get_clock().now().to_msg()
