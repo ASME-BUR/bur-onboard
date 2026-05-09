@@ -23,6 +23,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'topic_viewer = bur_bringup.topic_viewer:main'
         ],
     },
 )
