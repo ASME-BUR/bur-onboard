@@ -189,6 +189,10 @@ class JoyCommand(Node):
         self.output.target_vel.twist.angular.y =  self.multiplier * -get_axis(self.axis_mapping['angular_y'])
         self.output.target_vel.twist.angular.z =  self.multiplier * -get_axis(self.axis_mapping['angular_z'])
 
+        self.output.buttons = []
+        for i in range(len(msg.buttons)):
+            self.output.buttons.append(bool(msg.buttons[i]))
+
     def depth_callback(self, msg: PoseWithCovarianceStamped):
         self.output.current_pos.header.stamp = self.get_clock().now().to_msg()
         self.output.current_pos.pose.position.z = msg.pose.pose.position.z
@@ -214,7 +218,7 @@ class JoyCommand(Node):
 
         # Convert quaternion → Euler and publish
         # Note: tf2 quaternion convention is (x, y, z, w)
-        roll, pitch, yaw = self.quat_to_rpy(
+        roll, pitch, yaw = quat_to_rpy(
             msg.orientation.x,
             msg.orientation.y,
             msg.orientation.z,
