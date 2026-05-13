@@ -8,7 +8,7 @@
     <param name="pub_topic" value="control_effort"/>
     <param name="publish_rate" value="30"/>
     <param name="using_joy" value="true"/>
-    <param name="debug" value="true"/>
+    <param name="debug" value="false"/>
 
     <param name="linear_x/position/kp" value="1.0" type="float"/>
     <param name="linear_x/position/ki" value="0.0" type="float"/>
