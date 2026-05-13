@@ -143,6 +143,8 @@ class TopicViewer(Node):
             return [vec.x, vec.y, vec.z]
         def format_vector(vec):
             return [f'{float(num):>9.4f}' for num in unpack_vector(vec)]
+        def quat_msg_to_rpy(msg):
+            return quat_to_rpy(msg.x, msg.y, msg.z, msg.w)
 
         print("\033[2J\033[1;1H")
 
@@ -150,9 +152,9 @@ class TopicViewer(Node):
         print('|' + '{:^81}'.format('Bruin Underwater Robotics') + '|')
 
         print('+' + '-' * (21 + 6 * (9 + 1)) + '+')
-        print('| ' + ' '*20 + ' '.join(f'{s:^9}' for s in ['lin_x', 'lin_y', 'lin_z', 'ang_x', 'ang_y', 'ang_z']) + ' |')
-        print('| ' + '{:<20}'.format('Current position:') + ' '.join(format_vector(self.command_msg.current_pos.pose.position)+format_vector(self.command_msg.current_pos.pose.orientation))  + ' |')
-        print('| ' + '{:<20}'.format('Target position:') + ' '.join(format_vector(self.command_msg.target_pos.pose.position)+format_vector(self.command_msg.target_pos.pose.orientation)) + ' |')
+        print('| ' + ' '*20 + ' '.join(f'{s:^9}' for s in ['linearX', 'linearY', 'linearZ', 'roll', 'pitch', 'yaw']) + ' |')
+        print('| ' + '{:<20}'.format('Current position:') + ' '.join(format_vector(self.command_msg.current_pos.pose.position)+[f'{float(num):>9.4f}' for num in quat_msg_to_rpy(self.command_msg.current_pos.pose.orientation)])  + ' |')
+        print('| ' + '{:<20}'.format('Target position:') + ' '.join(format_vector(self.command_msg.target_pos.pose.position)+[f'{float(num):>9.4f}' for num in quat_msg_to_rpy(self.command_msg.target_pos.pose.orientation)]) + ' |')
 
         print('|' + ' ' * (21 + 6 * (9 + 1)) + '|')
         print('| ' + '{:<20}'.format('Current velocity:') + ' '.join(format_vector(self.command_msg.current_vel.twist.linear)+format_vector(self.command_msg.current_vel.twist.angular)) + ' |')
