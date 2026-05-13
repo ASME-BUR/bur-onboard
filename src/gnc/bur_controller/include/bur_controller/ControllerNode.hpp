@@ -30,11 +30,17 @@ namespace controller
     double computeCommand(double error, double dt)
     {
       double currentE = error; // Error is already calculated in the function calls
-      double deriv = (currentE - pastE) / dt;
+      double deriv = (currentE - this->pastE) / dt;
       rsum += currentE * dt;
       double o = kp * currentE + kd * deriv + rsum * ki;
-      pastE = currentE;
+      this->pastE = currentE;
       return o;
+    }
+
+    void reset()
+    {
+      this->pastE = 0.0;
+      this->rsum = 0.0;
     }
   
   private:
@@ -42,7 +48,6 @@ namespace controller
     double kd = 0;
     double ki = 0;
     double pastE = 0;
-    double currentE = 0;
     double rsum = 0;
   };
 

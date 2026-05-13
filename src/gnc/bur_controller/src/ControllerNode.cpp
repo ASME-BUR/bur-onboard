@@ -138,12 +138,11 @@ namespace controller
     
     if (active) {
       rclcpp::Time time = this->now(); // might have to change the now ????
-      double dt = (time - lastTime).seconds();
-
-      if (lastTime.seconds() == 0 || dt == 0) {
+      if (lastTime.seconds() == 0) {
         lastTime = time;
         return;
       }
+      double dt = (time - lastTime).seconds();
 
       controlEffort.wrench.force.x = -linear_x.computeCommand(pose_state.position.x, pose_setpoint.position.x, twist_state.linear.x, twist_setpoint.linear.x, dt);
       controlEffort.wrench.force.y = -linear_y.computeCommand(pose_state.position.y, pose_setpoint.position.y, twist_state.linear.y, twist_setpoint.linear.y, dt);
