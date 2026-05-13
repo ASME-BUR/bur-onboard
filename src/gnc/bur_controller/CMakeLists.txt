@@ -7,7 +7,6 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(control_toolbox REQUIRED)
 find_package(tf2 REQUIRED)
 
 find_package(bur_msgs REQUIRED)
@@ -24,7 +23,7 @@ add_executable(${PROJECT_NAME}
   src/ControllerNode.cpp
   src/utility_func.cpp
 )
-ament_target_dependencies(${PROJECT_NAME} rclcpp control_toolbox geometry_msgs tf2 bur_msgs)
+ament_target_dependencies(${PROJECT_NAME} rclcpp geometry_msgs tf2 bur_msgs)
 
 
 target_include_directories(
