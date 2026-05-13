@@ -21,7 +21,6 @@ include_directories(
 # Build main filter
 add_executable(${PROJECT_NAME}
   src/controller_node.cpp
-  src/controller.cpp
   src/utility_func.cpp
 )
 ament_target_dependencies(${PROJECT_NAME} rclcpp geometry_msgs tf2 bur_msgs)
