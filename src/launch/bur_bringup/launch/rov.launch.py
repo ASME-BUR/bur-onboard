@@ -62,5 +62,5 @@ def generate_launch_description():
         # camera,
         # arduino,
         rov_joy,
-        topic_viewer
+        # topic_viewer
     ])

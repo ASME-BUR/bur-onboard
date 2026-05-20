@@ -34,14 +34,14 @@
     <param name="angular_x/position/kp" value="1.0" type="float"/>
     <param name="angular_x/position/ki" value="0.0" type="float"/>
     <param name="angular_x/position/kd" value="0.0" type="float"/>
-    <param name="angular_x/velocity/kp" value="1.0" type="float"/>
+    <param name="angular_x/velocity/kp" value="500.0" type="float"/>
     <param name="angular_x/velocity/ki" value="0.0" type="float"/>
     <param name="angular_x/velocity/kd" value="0.0" type="float"/>
 
     <param name="angular_y/position/kp" value="1.0" type="float"/>
     <param name="angular_y/position/ki" value="0.0" type="float"/>
     <param name="angular_y/position/kd" value="0.0" type="float"/>
-    <param name="angular_y/velocity/kp" value="1.0" type="float"/>
+    <param name="angular_y/velocity/kp" value="500.0" type="float"/>
     <param name="angular_y/velocity/ki" value="0.0" type="float"/>
     <param name="angular_y/velocity/kd" value="0.0" type="float"/>
 
