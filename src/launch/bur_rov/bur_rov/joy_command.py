@@ -185,13 +185,27 @@ class JoyCommand(Node):
         self.output.target_vel.twist.linear.x  =  self.multiplier * -get_axis(self.axis_mapping['linear_x'])
         self.output.target_vel.twist.linear.y  =  self.multiplier * -get_axis(self.axis_mapping['linear_y'])
         self.output.target_vel.twist.linear.z  =  self.multiplier *  get_axis(self.axis_mapping['linear_z'])
-        self.output.target_vel.twist.angular.x =  self.multiplier *  get_axis(self.axis_mapping['angular_x'])
-        self.output.target_vel.twist.angular.y =  self.multiplier * -get_axis(self.axis_mapping['angular_y'])
+        # self.output.target_vel.twist.angular.x =  self.multiplier *  get_axis(self.axis_mapping['angular_x'])
+        # self.output.target_vel.twist.angular.y =  self.multiplier * -get_axis(self.axis_mapping['angular_y'])
         self.output.target_vel.twist.angular.z =  self.multiplier * -get_axis(self.axis_mapping['angular_z'])
 
         self.output.buttons = []
         for i in range(len(msg.buttons)):
             self.output.buttons.append(bool(msg.buttons[i]))
+
+        if (msg.buttons[4]):
+            self.output.target_vel.twist.angular.x = -0.5
+        elif (msg.buttons[5]):
+            self.output.target_vel.twist.angular.x = 0.5
+        else:
+            self.output.target_vel.twist.angular.x = 0.0
+
+        if (msg.buttons[6]):
+            self.output.target_vel.twist.angular.y = -0.5
+        elif (msg.buttons[7]):
+            self.output.target_vel.twist.angular.y = 0.5
+        else:
+            self.output.target_vel.twist.angular.y = 0.0
 
     def depth_callback(self, msg: PoseWithCovarianceStamped):
         self.output.current_pos.header.stamp = self.get_clock().now().to_msg()

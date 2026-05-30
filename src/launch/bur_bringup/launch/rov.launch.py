@@ -4,6 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
+from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_xml.launch_description_sources import XMLLaunchDescriptionSource
 
@@ -44,6 +45,14 @@ def generate_launch_description():
             '/joy.launch.py'
         ])
     )
+    topic_viewer = Node(
+        package="bur_bringup",
+        executable="topic_viewer",
+        name="topic_viewer",
+        parameters=[],
+        output="screen",
+        emulate_tty=True,
+    )
 
 
     return LaunchDescription([
@@ -51,6 +60,7 @@ def generate_launch_description():
         controller_launch,
         # depth_sensor,
         # camera,
-        arduino,
-        rov_joy
+        # arduino,
+        rov_joy,
+        # topic_viewer
     ])
