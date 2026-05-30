@@ -157,22 +157,25 @@ class TopicViewer(Node):
         def quat_msg_to_rpy(msg):
             return quat_to_rpy(msg.x, msg.y, msg.z, msg.w)
 
+        def print_line(s):
+            print('| ' + '{:^79}'.format(s) + ' |')
+
         print("\033[2J\033[1;1H")
 
         print('+' + '-' * (21 + 6 * (9 + 1)) + '+')
-        print('|' + '{:^81}'.format('Bruin Underwater Robotics') + '|')
+        print_line('Bruin Underwater Robotics')
 
         print('+' + '-' * (21 + 6 * (9 + 1)) + '+')
-        print('| ' + ' '*20 + ' '.join(f'{s:^9}' for s in ['linearX', 'linearY', 'linearZ', 'roll', 'pitch', 'yaw']) + ' |')
-        print('| ' + '{:<20}'.format('Current position:') + ' '.join(format_vector(self.command_msg.current_pos.pose.position)+[f'{float(num):>9.4f}' for num in quat_msg_to_rpy(self.command_msg.current_pos.pose.orientation)])  + ' |')
-        print('| ' + '{:<20}'.format('Target position:') + ' '.join(format_vector(self.command_msg.target_pos.pose.position)+[f'{float(num):>9.4f}' for num in quat_msg_to_rpy(self.command_msg.target_pos.pose.orientation)]) + ' |')
+        print_line(' '*20 + ' '.join(f'{s:^9}' for s in ['linearX', 'linearY', 'linearZ', 'roll', 'pitch', 'yaw']))
+        print_line('{:<20}'.format('Current position:') + ' '.join(format_vector(self.command_msg.current_pos.pose.position)+[f'{float(num):>9.4f}' for num in quat_msg_to_rpy(self.command_msg.current_pos.pose.orientation)]))
+        print_line('{:<20}'.format('Target position:') + ' '.join(format_vector(self.command_msg.target_pos.pose.position)+[f'{float(num):>9.4f}' for num in quat_msg_to_rpy(self.command_msg.target_pos.pose.orientation)]))
 
         print('|' + ' ' * (21 + 6 * (9 + 1)) + '|')
-        print('| ' + '{:<20}'.format('Current velocity:') + ' '.join(format_vector(self.command_msg.current_vel.twist.linear)+format_vector(self.command_msg.current_vel.twist.angular)) + ' |')
-        print('| ' + '{:<20}'.format('Target velocity:') + ' '.join(format_vector(self.command_msg.target_vel.twist.linear)+format_vector(self.command_msg.target_vel.twist.angular)) + ' |')
+        print_line('{:<20}'.format('Current velocity:') + ' '.join(format_vector(self.command_msg.current_vel.twist.linear)+format_vector(self.command_msg.current_vel.twist.angular)))
+        print_line('{:<20}'.format('Target velocity:') + ' '.join(format_vector(self.command_msg.target_vel.twist.linear)+format_vector(self.command_msg.target_vel.twist.angular)))
 
-        print('|' + ' ' * (21 + 6 * (9 + 1)) + '|')
-        print('| ' + '{:<20}'.format('Control effort:') + ' '.join(format_vector(self.controller_msg.wrench.force)+format_vector(self.controller_msg.wrench.torque)) + ' |')
+        print_line('')
+        print_line('{:<20}'.format('Control effort:') + ' '.join(format_vector(self.controller_msg.wrench.force)+format_vector(self.controller_msg.wrench.torque)))
         print('|' + '=' * (21 + 6 * (9 + 1)) + '|')
 
         if not self.thruster_msg.thrusters or len(self.thruster_msg.thrusters) < 8:
@@ -208,10 +211,10 @@ class TopicViewer(Node):
         ]
 
         for i in range(len(thruster_text)):
-            print('| ' + '{:<40}'.format(thruster_text[i]) + '{:^40}'.format(bot_ascii[i]) + '|')
+            print_line('{:<39}'.format(thruster_text[i]) + '{:^40}'.format(bot_ascii[i]))
 
-        print('|' + ' ' * (21 + 6 * (9 + 1)) + '|')
-        print('| Buttons: ' + '{:<71}'.format('  '.join(f'{int(b)}' for b in self.thruster_msg.buttons)) + '|')
+        print_line('')
+        print_line('Buttons: ' + '{:<70}'.format('  '.join(f'{int(b)}' for b in self.thruster_msg.buttons)))
 
         print('+' + '-' *(21 + 6 * (9 + 1)) + '+')
 
