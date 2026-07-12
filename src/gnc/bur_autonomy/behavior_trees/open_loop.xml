@@ -1,0 +1,21 @@
+ <root BTCPP_format="4" >
+    <BehaviorTree ID="MainTree">
+        <SequenceWithMemory>
+            <TimedCommandNode enable="0" 
+                          duration="5.0" />
+
+            <TimedCommandNode enable="1" 
+                          duration="5.0" 
+                          linear_z_position="-3.0" />
+
+            <TimedCommandNode enable="1" 
+                          duration="10.0" 
+                          linear_x_velocity="2.0" 
+                          linear_z_position="-3.0" />
+
+            <TimedCommandNode enable="0" 
+                          duration="1.0" />
+        </SequenceWithMemory>
+    </BehaviorTree>
+ </root>
+ 

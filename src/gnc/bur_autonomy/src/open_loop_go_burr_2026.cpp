@@ -11,6 +11,8 @@
 
 #include "sensor_msgs/msg/joy.hpp"
 
+#include "bur_msgs/msg/command.hpp"
+
 
 class SimpleManager : public rclcpp::Node
 {
@@ -18,6 +20,7 @@ class SimpleManager : public rclcpp::Node
         SimpleManager() : rclcpp::Node::Node("simple_manager") {
 
             this->declare_parameter("joy_topic", "/joy");
+            this->declare_parameter("command_topic", "/command");
 
             this->declare_parameter("behavior_tree", "tree.xml");
             this->declare_parameter("tick_rate", 10);
@@ -29,6 +32,8 @@ class SimpleManager : public rclcpp::Node
 
             joy_pub_ = this->create_publisher<sensor_msgs::msg::Joy>(
                 this->get_parameter("joy_topic").as_string(), 10);
+            command_pub_ = this->create_publisher<bur_msgs::msg::Command>(
+                this->get_parameter("command_topic").as_string(), 10);
 
             btTimer_ = this->create_wall_timer(
                 std::chrono::milliseconds(1000 / tick_rate), 
@@ -42,8 +47,12 @@ class SimpleManager : public rclcpp::Node
             this->tree_initialized_ = true;
         }
 
-        void publish_joy_msg(sensor_msgs::msg::Joy msg) {
+        void publish_joy_msg(const sensor_msgs::msg::Joy msg) {
             this->joy_pub_->publish(msg);
+        }
+
+        void publish_command_msg(const bur_msgs::msg::Command msg) {
+            this->command_pub_->publish(msg);
         }
 
     private:
@@ -52,6 +61,7 @@ class SimpleManager : public rclcpp::Node
         bool tree_initialized_ {false};
         
         rclcpp::Publisher<sensor_msgs::msg::Joy>::SharedPtr joy_pub_;
+        rclcpp::Publisher<bur_msgs::msg::Command>::SharedPtr command_pub_;
         rclcpp::TimerBase::SharedPtr btTimer_;
 
         void tick_behavior() {
@@ -152,6 +162,92 @@ class TimedJoyNode : public BT::StatefulActionNode
 };
 
 
+class TimedCommandNode : public BT::StatefulActionNode
+{
+    public:
+        TimedCommandNode(
+                const std::string& name, const BT::NodeConfiguration& config,
+                const std::shared_ptr<SimpleManager> node):
+            BT::StatefulActionNode(name, config), node_(node) {}
+
+        static BT::PortsList providedPorts() {
+            return { 
+                BT::InputPort<int>("enable"),
+                BT::InputPort<double>("duration"),
+                BT::InputPort<double>("linear_x_position"),
+                BT::InputPort<double>("linear_y_position"),
+                BT::InputPort<double>("linear_z_position"),
+                BT::InputPort<double>("linear_x_velocity"),
+                BT::InputPort<double>("linear_y_velocity"),
+                BT::InputPort<double>("linear_z_velocity"),
+                BT::InputPort<double>("angular_x_position"),
+                BT::InputPort<double>("angular_y_position"),
+                BT::InputPort<double>("angular_z_position"),
+                BT::InputPort<double>("angular_x_velocity"),
+                BT::InputPort<double>("angular_y_velocity"),
+                BT::InputPort<double>("angular_z_velocity"),
+            };
+        }
+
+        BT::NodeStatus onStart() override   {
+            this->initializeParams();
+            begin_ = std::chrono::steady_clock::now();
+            return this->checkTimer();
+            
+        }
+        BT::NodeStatus onRunning() override { return this->checkTimer(); }
+        void onHalted() override {}
+    
+    private:
+        void initializeParams() {
+            /*
+                0: left joystick left/right (left/right)
+                1: left joystick up/down (forward/back)
+                3: right joystick left/right (yaw left/right)
+                4: right joystick up/down (robot up/down)
+            */
+            this->msg_ = bur_msgs::msg::Command();
+            this->msg_.buttons.clear();
+
+            this->duration_ = getInput<double>("duration") ? getInput<double>("duration").value() : 0;
+            
+            this->msg_.target_pos.pose.position.x = getInput<double>("linear_x_position") ? getInput<double>("linear_x_position").value() : 0;
+            this->msg_.target_pos.pose.position.y = getInput<double>("linear_y_position") ? getInput<double>("linear_y_position").value() : 0;
+            this->msg_.target_pos.pose.position.z = getInput<double>("linear_z_position") ? getInput<double>("linear_z_position").value() : 0;
+            this->msg_.target_vel.twist.linear.x = getInput<double>("linear_x_velocity") ? getInput<double>("linear_x_velocity").value() : 0;
+            this->msg_.target_vel.twist.linear.y = getInput<double>("linear_y_velocity") ? getInput<double>("linear_y_velocity").value() : 0;
+            this->msg_.target_vel.twist.linear.z = getInput<double>("linear_z_velocity") ? getInput<double>("linear_z_velocity").value() : 0;
+            this->msg_.target_vel.twist.angular.x = getInput<double>("angular_x_velocity") ? getInput<double>("angular_x_velocity").value() : 0;
+            this->msg_.target_vel.twist.angular.y = getInput<double>("angular_y_velocity") ? getInput<double>("angular_y_velocity").value() : 0;
+            this->msg_.target_vel.twist.angular.z = getInput<double>("angular_z_velocity") ? getInput<double>("angular_z_velocity").value() : 0;
+
+            std::vector<int> buttons(13, 0);
+            buttons[9] = getInput<int>("enable") ? getInput<int>("enable").value() : 0;
+            for (size_t i = 0; i < buttons.size(); i++)
+            {
+                this->msg_.buttons.push_back(buttons[i]);
+            }
+        }
+
+        BT::NodeStatus checkTimer() {
+            using namespace std;
+
+            auto end = chrono::steady_clock::now();
+            if(chrono::duration_cast<chrono::seconds>(end-this->begin_).count() > this->duration_) {
+                return BT::NodeStatus::SUCCESS;
+            }
+            this->node_->publish_command_msg(this->msg_);
+            return BT::NodeStatus::RUNNING;
+        }
+
+        const std::shared_ptr<SimpleManager> node_;
+        bur_msgs::msg::Command msg_;
+
+        std::chrono::steady_clock::time_point begin_;
+        double duration_;
+};
+
+
 int main(int argc, char *argv[])
 {
     rclcpp::init(argc, argv);
@@ -160,6 +256,7 @@ int main(int argc, char *argv[])
     auto manager = std::make_shared<SimpleManager>();
 
     factory.registerNodeType<TimedJoyNode>("TimedJoyNode", manager);
+    factory.registerNodeType<TimedCommandNode>("TimedCommandNode", manager);
 
     manager->initialize_tree(factory);
     rclcpp::spin(manager);

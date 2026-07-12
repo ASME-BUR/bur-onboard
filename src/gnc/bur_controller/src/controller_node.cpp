@@ -84,6 +84,8 @@ void ControllerNode::set_constants()
 
     // Determines whether target velocity is given or computed by the controller itself
     // Corresponds to tele-op (target velocity given) vs autonomous (no target given)
+    if (i == 2)
+      continue;
     controllers[i].second->setUsingExternalVelocityTarget(this->using_joy);
   }
 }
