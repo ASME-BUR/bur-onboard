@@ -15,3 +15,6 @@ services:
       - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
       - PULSE_SERVER=${PULSE_SERVER}
       - LIBGL_ALWAYS_SW=1
+    post_start:
+      - command: git config --global --add safe.directory /root/bur-onboard
+        user: root
