@@ -47,11 +47,11 @@ class SimpleManager : public rclcpp::Node
             this->tree_initialized_ = true;
         }
 
-        void publish_joy_msg(const sensor_msgs::msg::Joy msg) {
+        void publish_joy_msg(const sensor_msgs::msg::Joy& msg) {
             this->joy_pub_->publish(msg);
         }
 
-        void publish_command_msg(const bur_msgs::msg::Command msg) {
+        void publish_command_msg(const bur_msgs::msg::Command& msg) {
             this->command_pub_->publish(msg);
         }
 
