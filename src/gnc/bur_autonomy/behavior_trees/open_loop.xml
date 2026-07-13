@@ -10,10 +10,10 @@
 
             <TimedCommandNode enable="1" 
                           duration="10.0" 
-                          linear_x_velocity="2.0" 
+                          linear_x_velocity="-2.0" 
                           linear_z_position="-3.0" />
 
-            <SubTree ID="StylePoints"/>
+            <!-- <SubTree ID="StylePoints"/> -->
 
             <TimedCommandNode enable="0" 
                           duration="1.0" />

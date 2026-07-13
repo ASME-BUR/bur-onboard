@@ -139,12 +139,12 @@ class TopicViewer(Node):
     def timer_callback(self):
         # This format is heavily inspired by https://github.com/vectr-ucla/direct_lidar_inertial_odometry
 
-        if not self.imu_initialized:
-            self.counter += 1
-            if self.counter == 100:
-                print("Waiting for IMU...")
-                self.counter = 0
-            return
+        # if not self.imu_initialized:
+        #     self.counter += 1
+        #     if self.counter == 100:
+        #         print("Waiting for IMU...")
+        #         self.counter = 0
+        #     return
 
         # Magic numbers
         column_width = 9
