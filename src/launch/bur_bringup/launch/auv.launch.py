@@ -41,16 +41,9 @@ def generate_launch_description():
     manager = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('bur_autonomy'), 'launch'),
-            '/manager.launch.py'
+            '/open_loop.launch.py'
         ])
     )
-
-    # open_loop = Node(
-    #     package="bur_rov",
-    #     executable="open_loop",
-    #     name="open_loop",
-    # )
-
 
     return LaunchDescription([
         thruster_manager,
@@ -58,6 +51,7 @@ def generate_launch_description():
         depth_sensor,
         # camera,
         # open_loop,
-        # manager,
+        manager,
         arduino
     ])
+    
