@@ -6,14 +6,14 @@
 
             <TimedCommandNode enable="1" 
                           duration="5.0" 
-                          linear_z_position="-3.0" />
+                          linear_z_position="-1.0" />
 
             <TimedCommandNode enable="1" 
                           duration="10.0" 
                           linear_x_velocity="-2.0" 
-                          linear_z_position="-3.0" />
+                          linear_z_velocity="-1.0" />
 
-            <!-- <SubTree ID="StylePoints"/> -->
+            <SubTree ID="StylePoints"/>
 
             <TimedCommandNode enable="0" 
                           duration="1.0" />
@@ -23,9 +23,9 @@
     <BehaviorTree ID="StylePoints">
         <SequenceWithMemory>
             <TimedCommandNode enable="1" 
-                            duration="0.0" 
-                            linear_x_velocity="2.0" 
-                            linear_z_position="-3.0" />
+                            duration="10.0" 
+                            angular_x_velocity="2.0" 
+                            linear_z_velocity="-1.0" />
         </SequenceWithMemory>
     </BehaviorTree>
  </root>

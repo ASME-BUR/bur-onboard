@@ -38,9 +38,11 @@ endfunction()
 
 add_executable(bur_autonomy src/manager_node.cpp src/bt_nodes.cpp)
 add_executable(open_loop src/open_loop_go_burr_2026.cpp)
+add_executable(open_loop_control_effort src/open_loop_control_effort.cpp)
 
 add_target_dependencies(bur_autonomy)
 add_target_dependencies(open_loop)
+add_target_dependencies(open_loop_control_effort)
 
 #target_include_directories(simple_manager PUBLIC
 #  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

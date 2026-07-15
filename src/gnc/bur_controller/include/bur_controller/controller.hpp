@@ -60,10 +60,11 @@ public:
   double computeCommand(double current_pos, double target_pos, double current_vel, double target_vel, double dt)
   {
     if (this->using_external_target_vel) {
-      if (abs(target_vel) < 0.1) {
+      if (abs(target_vel) < 0.1 && this->initialized) {
         target_pos = this->position_setpoint; // Hold at current position
       } else {
         this->position_setpoint = current_pos;
+        this->initialized = true;
       }
     }
     double position_error = target_pos - current_pos;
@@ -89,6 +90,7 @@ private:
   double position_setpoint;
   bool using_external_target_vel = false; // Indicates if target velocity given vs computed from position
   bool using_angles = false; // Determines if positions are angle-wrapped
+  bool initialized = false;
 
 };
 
