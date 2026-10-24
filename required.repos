@@ -2,15 +2,15 @@ repositories:
     micro-ROS/micro-ROS-Agent:
         type: git
         url: https://github.com/micro-ROS/micro-ROS-Agent.git
-        version: humble
+        version: jazzy
     micro-ROS/micro_ros_msgs:
         type: git
         url: https://github.com/micro-ROS/micro_ros_msgs.git
+        version: jazzy
     micro-ROS/micro_ros_setup:
-        version: humble
         type: git
         url: https://github.com/micro-ROS/micro_ros_setup.git
-        version: humble
+        version: jazzy
     ptrmu/ros2_shared:
         type: git
         url: https://github.com/ptrmu/ros2_shared.git

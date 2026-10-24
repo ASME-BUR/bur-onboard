@@ -1,8 +1,8 @@
 # System #
 
-- Ubuntu 22.04
-- ROS2 Humble
-- Gazebo 11
+- Ubuntu 24.04
+- ROS2 Jazzy
+- Gazebo Harmonic
 
 # Installation #
 
@@ -25,12 +25,12 @@
 
 ### 4. Add sources to ~/.bashrc ###
    ```
-   grep -F "source /opt/ros/humble/setup.bash" ~/.bashrc \
-       || echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+   grep -F "source /opt/ros/jazzy/setup.bash" ~/.bashrc \
+       || echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
    grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.bashrc \
        || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
-   grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
-       || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
+   grep -F "export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" ~/.bashrc \
+       || echo "# export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" >> ~/.bashrc
    ```
 After running this command, close and re-open your terminal before proceeding.
 
@@ -69,18 +69,9 @@ root@d53438d5ffdb:/# ros2 node list
 (Your results may look slightly different, depending on your version of the repository; as long as some nodes appear, this is OK.)
 
 ### (Optional) Install Gazebo: ###
-
+Gazebo Classic (Gazebo 11) is not supported on Ubuntu 24.04 / ROS2 Jazzy. Jazzy pairs with Gazebo Harmonic, which is installed together with the ROS bridge packages:
    ```
-   sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-   wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
    sudo apt-get update
-   sudo apt-get install gazebo11
-   sudo apt-get install libgazebo11-dev
+   sudo apt-get install ros-jazzy-ros-gz
    ```
-   You can write gazebo in a terminal to make sure that gazebo runs correctly. Write gazebo --version to ensure that the version number is 11.X.
-
-### (Optional) Install the ROS packages for gazebo: ###
-   ```
-   sudo apt install ros-humble-gazebo-ros-pkgs
-   colcon build --symlink-install
-   ```
+   Run `gz sim` in a terminal to make sure that Gazebo runs correctly, and `gz sim --version` to ensure that the version number is 8.X (Harmonic).

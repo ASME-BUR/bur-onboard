@@ -3,7 +3,7 @@
 
 set -eu
 
-TARGET_OS=jammy
+TARGET_OS=noble
 
 # Check OS version
 if ! which lsb_release > /dev/null ; then
@@ -36,11 +36,14 @@ apt-get install -y software-properties-common
 add-apt-repository -y universe
 apt-get install -y curl gnupg2 lsb-release build-essential wget
 
-curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+# Configure the ROS apt repository via the ros2-apt-source package (keeps the signing key up to date)
+ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
+curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(lsb_release -cs)_all.deb"
+dpkg -i /tmp/ros2-apt-source.deb
+rm -f /tmp/ros2-apt-source.deb
 
 apt-get update
-apt-get install -y ros-humble-desktop \
+apt-get install -y ros-jazzy-desktop \
                    python3-argcomplete python3-colcon-clean \
                    python3-colcon-common-extensions \
                    python3-rosdep
@@ -52,9 +55,9 @@ set +u
 rosdep update
 
 # Add ROS entries to ~/.bashrc
-grep -F "source /opt/ros/humble/setup.bash" ~/.bashrc \
-    || echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+grep -F "source /opt/ros/jazzy/setup.bash" ~/.bashrc \
+    || echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.bashrc \
     || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
-grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
-    || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
+grep -F "export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" ~/.bashrc \
+    || echo "# export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" >> ~/.bashrc

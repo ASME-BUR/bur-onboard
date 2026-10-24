@@ -2,7 +2,7 @@ services:
   bur-onboard:
     build:
       context: ..
-      dockerfile: docker/Dockerfile.humble
+      dockerfile: docker/Dockerfile.jazzy
     entrypoint: /bin/bash
     tty: true
     volumes:

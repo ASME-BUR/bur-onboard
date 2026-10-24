@@ -1,12 +1,12 @@
 # Add ROS entries to ~/.bashrc
-grep -F "source /opt/ros/humble/setup.bash" ~/.bashrc \
-    || echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
+grep -F "source /opt/ros/jazzy/setup.bash" ~/.bashrc \
+    || echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
 grep -F "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" ~/.bashrc \
     || echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> ~/.bashrc
-grep -F "export ROS_LOCALHOST_ONLY=1" ~/.bashrc \
-    || echo "# export ROS_LOCALHOST_ONLY=1" >> ~/.bashrc
+grep -F "export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" ~/.bashrc \
+    || echo "# export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" >> ~/.bashrc
 
-source /opt/ros/humble/setup.bash
+source /opt/ros/jazzy/setup.bash
 
 # Install apt dependencies
 apt-get update
